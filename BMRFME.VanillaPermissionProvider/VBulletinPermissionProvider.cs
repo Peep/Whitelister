@@ -41,7 +41,7 @@ namespace BMRFME.VBulletinPermissionProvider
         private Connection _connection;
         private DateTime _lastConnection;
         private List<GUID> _checkedGuids;
-        private Dictionary<PlayerData, DateTime> _connAttempts;
+        private Dictionary<string, ConnectionAttempt> _connAttempts;
 
 
         public VBulletinPermissionProvider()
@@ -141,8 +141,6 @@ namespace BMRFME.VBulletinPermissionProvider
                 }
             }
 
-            // This was previously an else if, but I don't think it makes sense
-            // so I took it out.
             if (_config.DisallowedGroups.ContainsKey((int)player.PrimaryGroup) ||
                 _config.DisallowedGroups.Keys.Any(x =>
                 {
@@ -313,6 +311,7 @@ namespace BMRFME.VBulletinPermissionProvider
                 return;
             }
 
+            CheckIfSpamming(player);
             GetWhitelist(player);
             bool hasAccount = GetForumAccount(player);
             if (!hasAccount) return; // lol hack bad fix
@@ -350,6 +349,7 @@ namespace BMRFME.VBulletinPermissionProvider
                 try
                 {
                     // This will throw if the disallowed group is a secondary group.
+                    // Should probably get the actual index properly here.
                     KickPlayer(player.Info, "{0}", _config.DisallowedGroups[player.PrimaryGroup]);
                     return;
                 }
@@ -375,6 +375,14 @@ namespace BMRFME.VBulletinPermissionProvider
                     _connection = new Connection(_config.AuthInfo);
                 }
                 return _connection;
+            }
+        }
+
+        public void CheckIfSpamming(PlayerData player)
+        {
+            if (_connAttempts.ContainsKey(player.Info.IpAddr))
+            {
+                // stuff!
             }
         }
 
@@ -464,7 +472,7 @@ namespace BMRFME.VBulletinPermissionProvider
             _lastConnection = DateTime.Now;
 
             _checkedGuids = new List<GUID>();
-            _connAttempts = new Dictionary<PlayerData, DateTime>();
+            _connAttempts = new Dictionary<ConnectionAttempt, DateTime>();
 
             Whitelister.PlayerListEvent += e => OnConnectAndList(new PlayerData(e.Player), false);
             Whitelister.PlayerDisconnectEvent += e => LogoutPlayer(new PlayerData(e.Player));
@@ -506,6 +514,7 @@ namespace BMRFME.VBulletinPermissionProvider
                 Info = new PlayerInformation(info.Name, info.IpAddr, info.Port.ToString(CultureInfo.InvariantCulture), info.Number.ToString(CultureInfo.InvariantCulture))
                 {
                     Guid = info.Guid
+
                 };
                 GhostAmount = new TimeSpan(0, 0, 9001, 0);
             }
