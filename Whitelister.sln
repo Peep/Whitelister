@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMRFME.PermissionScriptingPlugin", "BMRFME.PermissionScriptingPlugin\BMRFME.PermissionScriptingPlugin.csproj", "{B606C36F-39FB-4890-8631-72AA63D6FA0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMRFME.TextPermissionProvider", "BMRFME.TextPermissionProvider\BMRFME.TextPermissionProvider.csproj", "{981F1D98-6637-452F-9BBA-C23FA2E3D60B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMRFME.VBulletinPermissionProvider", "BMRFME.VanillaPermissionProvider\BMRFME.VBulletinPermissionProvider.csproj", "{3144E2C0-BDD0-45C4-91F1-B82F03888B2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BMRFME.Whitelist", "BMRFME.Whitelister\BMRFME.Whitelist.csproj", "{BDB5929C-3C3A-4A4D-B37A-6E7F84EC1533}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B606C36F-39FB-4890-8631-72AA63D6FA0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B606C36F-39FB-4890-8631-72AA63D6FA0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B606C36F-39FB-4890-8631-72AA63D6FA0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B606C36F-39FB-4890-8631-72AA63D6FA0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{981F1D98-6637-452F-9BBA-C23FA2E3D60B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{981F1D98-6637-452F-9BBA-C23FA2E3D60B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{981F1D98-6637-452F-9BBA-C23FA2E3D60B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{981F1D98-6637-452F-9BBA-C23FA2E3D60B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3144E2C0-BDD0-45C4-91F1-B82F03888B2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3144E2C0-BDD0-45C4-91F1-B82F03888B2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3144E2C0-BDD0-45C4-91F1-B82F03888B2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3144E2C0-BDD0-45C4-91F1-B82F03888B2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDB5929C-3C3A-4A4D-B37A-6E7F84EC1533}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDB5929C-3C3A-4A4D-B37A-6E7F84EC1533}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDB5929C-3C3A-4A4D-B37A-6E7F84EC1533}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDB5929C-3C3A-4A4D-B37A-6E7F84EC1533}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
