@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using BattleNET;
 using BMRFME.Whitelist;
 using BMRFME.Whitelist.Plugins;
 using BMRFME.Whitelist.Sql;
@@ -41,7 +42,7 @@ namespace BMRFME.VBulletinPermissionProvider
         private Connection _connection;
         private DateTime _lastConnection;
         private List<GUID> _checkedGuids;
-        private Dictionary<string, ConnectionAttempt> _connAttempts;
+        private ConnectionAttempts _connAttempts;
 
 
         public VBulletinPermissionProvider()
@@ -311,7 +312,8 @@ namespace BMRFME.VBulletinPermissionProvider
                 return;
             }
 
-            CheckIfSpamming(player);
+            if (isConnection) SpamCheck(player);
+
             GetWhitelist(player);
             bool hasAccount = GetForumAccount(player);
             if (!hasAccount) return; // lol hack bad fix
@@ -378,11 +380,14 @@ namespace BMRFME.VBulletinPermissionProvider
             }
         }
 
-        public void CheckIfSpamming(PlayerData player)
+        public void SpamCheck(PlayerData player)
         {
-            if (_connAttempts.ContainsKey(player.Info.IpAddr))
+            _connAttempts.Add(player.Info.IpAddr);
+
+            if (_connAttempts.Within(player.Info.IpAddr, Whitelister.Instance.Config.RateLimitSeconds) >= 5)
             {
-                // stuff!
+                // fire wall em, boss
+                KickPlayer(player.Info, "Too many join attempts. Firewalled for {0}m");
             }
         }
 
@@ -472,7 +477,7 @@ namespace BMRFME.VBulletinPermissionProvider
             _lastConnection = DateTime.Now;
 
             _checkedGuids = new List<GUID>();
-            _connAttempts = new Dictionary<ConnectionAttempt, DateTime>();
+            _connAttempts = new ConnectionAttempts();
 
             Whitelister.PlayerListEvent += e => OnConnectAndList(new PlayerData(e.Player), false);
             Whitelister.PlayerDisconnectEvent += e => LogoutPlayer(new PlayerData(e.Player));

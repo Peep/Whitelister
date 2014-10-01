@@ -24,6 +24,9 @@ namespace BMRFME.Whitelist
         [Field("Log To Console")]
         public bool LogToConsole;
 
+        [Field("Rate Limit")]
+        public int RateLimitSeconds = 30;
+
         [Field("PlayerConnectionStageOne", "RegularExpressions")]
         public string PlayerConnectionStageOneRegex = @"^Player[\s]#?([0-9]+)#?[\s](.+)[\s]\((.+):(.+)\)[\s]connected";
 
