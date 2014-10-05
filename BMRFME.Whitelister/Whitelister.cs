@@ -224,13 +224,18 @@ namespace BMRFME.Whitelist
 
 
                 Logger.Debug("Got Player Disconnect");
-                Logger.Debug("\tName : {0}", info.Name);
+                // This causes an NRE if the player doesn't exist
+                //Logger.Debug("\tName : {0}", info.Name);
 
-                lock (_producerEventQueue)
+                if (info != null)
                 {
-                    _producerEventQueue.Enqueue(new PlayerDisconnectEventArgs(info));
+                    lock (_producerEventQueue)
+                    {
+                        _producerEventQueue.Enqueue(new PlayerDisconnectEventArgs(info));
+                    }
+
+                    CurrentPlayers.TryRemove(info.Number, out info);
                 }
-                CurrentPlayers.TryRemove(info.Number, out info);
 
                 _queueEvent.Set();
                 return;

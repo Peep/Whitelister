@@ -24,8 +24,17 @@ namespace BMRFME.Whitelist
         [Field("Log To Console")]
         public bool LogToConsole;
 
+        [Field("Enabled", "Firewall Options")]
+        public bool FirewallEnabled = true;
+
         [Field("Rate Limit")]
-        public int RateLimitSeconds = 30;
+        public int FirewallRateLimit = 30;
+
+        [Field("Allowed Attempts")]
+        public int FirewallMaxAttempts = 5;
+
+        [Field("Ban Duration")]
+        public int FirewallBanDuration = 60;
 
         [Field("PlayerConnectionStageOne", "RegularExpressions")]
         public string PlayerConnectionStageOneRegex = @"^Player[\s]#?([0-9]+)#?[\s](.+)[\s]\((.+):(.+)\)[\s]connected";

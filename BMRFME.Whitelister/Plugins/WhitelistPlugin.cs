@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using BMRFME.Whitelist.Events;
 
 namespace BMRFME.Whitelist.Plugins
@@ -15,8 +16,8 @@ namespace BMRFME.Whitelist.Plugins
         {
             Name = name;
             Version = version;
+            ConsoleControlHandler.SetConsoleCtrlHandler((ConsoleCtrlCheck), true);
         }
-
 
         public void KickPlayer(PlayerInformation playerArgs, string format, params object[] args)
         {
@@ -44,6 +45,12 @@ namespace BMRFME.Whitelist.Plugins
                 formatedString = formatedString.Substring(0, 79);
             Whitelister.Client.SendCommand(BattleNET.BattlEyeCommand.Ban,
                 string.Format("{0} {1}", playerArgs.Number, formatedString));
+        }
+
+        public virtual bool ConsoleCtrlCheck(ConsoleControlHandler.CtrlTypes ctrlType)
+        {
+            // Put your own handler here
+            return true;
         }
 
         public static WhitelistPlugin LoadPluginFromFile(string fullpath)

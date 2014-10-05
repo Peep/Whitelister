@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using BattleNET;
+using BMRFME.VanillaPermissionProvider;
 using BMRFME.Whitelist;
 using BMRFME.Whitelist.Plugins;
 using BMRFME.Whitelist.Sql;
@@ -49,6 +50,13 @@ namespace BMRFME.VBulletinPermissionProvider
             : base("BMRF Whitelist Plugin", "5.0 Annoying Panda")
         {
 
+        }
+
+        public override bool ConsoleCtrlCheck(ConsoleControlHandler.CtrlTypes ctrlType)
+        {
+            Whitelister.Logger.Crash("Whitelisted Terminated.");
+            Firewall.RemoveAllBans();
+            return true;
         }
 
         public void GetGhosting(PlayerData player)
@@ -213,7 +221,7 @@ namespace BMRFME.VBulletinPermissionProvider
 
         public void LoginPlayer(PlayerData player)
         {
-            Whitelister.Logger.Info("Login Player {0}", player.Info.Name);
+            Whitelister.Logger.Info("{0} has logged in.", player.Info.Name);
             _loginQuery.Parameters["@name"].Value = player.Info.Name;
             _loginQuery.Parameters["@guid"].Value = player.Info.Guid;
             _loginQuery.Parameters["@ip"].Value = player.Info.IpAddr;
@@ -225,7 +233,7 @@ namespace BMRFME.VBulletinPermissionProvider
 
         public void LogoutPlayer(PlayerData player)
         {
-            Whitelister.Logger.Info("Logout Player {0}", player.Info.Name);
+            Whitelister.Logger.Info("{0} has logged out.", player.Info.Name);
             _logoutQuery.Parameters["@guid"].Value = player.Info.Guid;
             _logoutQuery.Parameters["@ip"].Value = player.Info.IpAddr;
             _logoutQuery.Parameters["@instance"].Value = _config.DayZInstance;
@@ -302,8 +310,8 @@ namespace BMRFME.VBulletinPermissionProvider
         {
             int watchdog = 0;
 
-        ohgodagoto:
-            watchdog += 1;
+            //ohgodagoto:
+            //    watchdog += 1;
 
             if (watchdog > 3)
             {
@@ -312,7 +320,8 @@ namespace BMRFME.VBulletinPermissionProvider
                 return;
             }
 
-            if (isConnection) SpamCheck(player);
+            if (isConnection && Whitelister.Instance.Config.FirewallEnabled) 
+                SpamCheck(player);
 
             GetWhitelist(player);
             bool hasAccount = GetForumAccount(player);
@@ -355,7 +364,7 @@ namespace BMRFME.VBulletinPermissionProvider
                     KickPlayer(player.Info, "{0}", _config.DisallowedGroups[player.PrimaryGroup]);
                     return;
                 }
-                catch (KeyNotFoundException e)
+                catch (KeyNotFoundException)
                 {
                     KickPlayer(player.Info, "One of your secondary groups is disallowed");
                     return;
@@ -382,12 +391,20 @@ namespace BMRFME.VBulletinPermissionProvider
 
         public void SpamCheck(PlayerData player)
         {
+            int duration = Whitelister.Instance.Config.FirewallBanDuration;
+            int rateLimit = Whitelister.Instance.Config.FirewallRateLimit;
+            int maxAttempts = Whitelister.Instance.Config.FirewallMaxAttempts;
+
             _connAttempts.Add(player.Info.IpAddr);
 
-            if (_connAttempts.Within(player.Info.IpAddr, Whitelister.Instance.Config.RateLimitSeconds) >= 5)
+            if (_connAttempts.Within(player.Info.IpAddr, rateLimit) >= maxAttempts)
             {
-                // fire wall em, boss
-                KickPlayer(player.Info, "Too many join attempts. Firewalled for {0}m");
+                KickPlayer(player.Info, "Too many join attempts. Firewalled for " 
+                    + duration + " seconds");
+
+                Firewall.AddBan(player.Info.IpAddr, 
+                    String.Format("Spamming: {0}({1})", player.Info.Name, DateTime.Now),
+                    duration);
             }
         }
 

@@ -71,7 +71,10 @@ namespace BMRFME.Whitelist
                 if (LogToConsole && level >= LogLevel.Debug)
                     Console.WriteLine(logStr);
 
-                _writer.WriteLine(logStr);
+                if (_writer != null)
+                {
+                    _writer.WriteLine(logStr);
+                }
             }
         }
 
@@ -82,22 +85,30 @@ namespace BMRFME.Whitelist
 
         public void Info(string format, params object[] args)
         {
+            Console.ForegroundColor = ConsoleColor.Green;
             Log(LogLevel.Info, format, args);
+            Console.ResetColor();
         }
 
         public void Warn(string format, params object[] args)
         {
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Log(LogLevel.Warn, format, args);
+            Console.ResetColor();
         }
 
         public void Error(string format, params object[] args)
         {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
             Log(LogLevel.Error, format, args);
+            Console.ResetColor();
         }
 
         public void Crash(string format, params object[] args)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Log(LogLevel.Crash, format, args);
+            Console.ResetColor();
         }
     }
 }

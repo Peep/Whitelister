@@ -52,6 +52,7 @@
     <Compile Include="Api\ApiService.cs" />
     <Compile Include="Api\IApiService.cs" />
     <Compile Include="ConfigWhitelist.cs" />
+    <Compile Include="ConsoleControlHandler.cs" />
     <Compile Include="Events\PlayerConnectEventArgs.cs" />
     <Compile Include="Events\PlayerDisconnectEventArgs.cs" />
     <Compile Include="Events\PlayerEventArgs.cs" />

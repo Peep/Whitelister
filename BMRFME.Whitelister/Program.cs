@@ -2,9 +2,7 @@
 using System.Threading;
 using System.ServiceModel;
 using System.ServiceModel.Description;
-using System.ServiceModel.Security;
 using System.ServiceModel.Web;
-using System.Security.Permissions;
 using BMRFME.Whitelist.Api;
 
 namespace BMRFME.Whitelist
@@ -15,7 +13,6 @@ namespace BMRFME.Whitelist
         public static string ConfigName;
         public static string PluginConfig;
 
-        [PermissionSet(SecurityAction.Demand, Name = "FullTrust")]
         public static void Main(string[] args)
         {
             try
@@ -27,7 +24,7 @@ namespace BMRFME.Whitelist
                     eventArgs.Cancel = false;
                 };
                 workThread.Start();
-                Whitelister.Instance.Logger.Level = Logger.LogLevel.Debug;
+                Whitelister.Instance.Logger.Level = Logger.LogLevel.Info;
                 //HostApi();
             }
             catch (Exception e)
@@ -38,9 +35,7 @@ namespace BMRFME.Whitelist
                     Console.WriteLine(e);
                     e = e.InnerException;
                 }
-                //Whitelister.Instance.Stop();
             }
-            //Whitelister.Instance.Stop();
         }
 
         public static void HostApi()
